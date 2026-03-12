@@ -9,10 +9,10 @@ spring:
       server:
         webmvc:
           routes:
-            - id: auth-service
-              uri: lb://auth-service
+            - id: user-auth-service
+              uri: lb://user-auth-service
               predicates:
-                - Path=/api/v1/auth/**
+                - Path=/api/v1/auth/**, /api/v1/users/**
 
 eureka:
   client:
