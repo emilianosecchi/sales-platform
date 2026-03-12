@@ -2,7 +2,9 @@ package com.esecchi.userauth.controller;
 
 import com.esecchi.userauth.request.LoginRequest;
 import com.esecchi.userauth.request.RegisterRequest;
+import com.esecchi.userauth.response.AuthenticationResponse;
 import com.esecchi.userauth.response.UserResponseDTO;
+import com.esecchi.userauth.service.AuthService;
 import com.esecchi.userauth.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +23,7 @@ import java.net.URI;
 public class AuthController {
 
     private final UserService userService;
+    private final AuthService authService;
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@Valid @RequestBody RegisterRequest request) {
@@ -34,5 +37,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public void login(@Valid @RequestBody LoginRequest request) {}
+    public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest request) {
+        AuthenticationResponse authResponse = authService.authenticateUser(request);
+        return ResponseEntity.ok(authResponse);
+    }
 }
