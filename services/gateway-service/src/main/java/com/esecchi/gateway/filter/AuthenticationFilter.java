@@ -34,8 +34,8 @@ public class AuthenticationFilter implements HandlerFilterFunction<ServerRespons
             Claims claims = jwtUtil.getAllClaimsFromToken(token);
             // Se inyecta la identidad en la request para los microservicios
             ServerRequest modifiedRequest = ServerRequest.from(request)
-                    .header("X-User-Id", claims.get("userId", String.class))
-                    .header("X-User-Roles", claims.get("roles", String.class))
+                    .header("X-User-Id", String.valueOf(claims.get("userId")))
+                    .header("X-User-Roles", String.valueOf(claims.get("roles")))
                     .build();
 
             return next.handle(modifiedRequest);
