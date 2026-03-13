@@ -1,7 +1,9 @@
 package com.esecchi.userauth.request;
 
+import com.esecchi.userauth.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record RegisterRequest(
     @NotBlank(message = "El nombre es obligatorio")
@@ -15,5 +17,8 @@ public record RegisterRequest(
     String email,
 
     @NotBlank(message = "La contraseña es obligatoria")
-    String password
+    String password,
+
+    @NotNull(message = "El rol es obligatorio")
+    Role role
 ) {}

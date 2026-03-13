@@ -30,6 +30,10 @@ public class User implements UserDetails {
     @Column(updatable = false)
     private LocalDate registrationDate;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     private String firstName;
     private String lastName;
     private boolean enabled = true;

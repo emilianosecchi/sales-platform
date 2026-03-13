@@ -26,7 +26,7 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<UserResponseDTO> register(@Valid @RequestBody RegisterRequest request) {
         UserResponseDTO userResponse = userService.createUser(request);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Object> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody LoginRequest request) {
         AuthenticationResponse authResponse = authService.authenticateUser(request);
         return ResponseEntity.ok(authResponse);
     }

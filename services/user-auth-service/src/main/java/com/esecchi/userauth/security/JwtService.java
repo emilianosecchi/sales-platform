@@ -1,5 +1,6 @@
 package com.esecchi.userauth.security;
 
+import com.esecchi.userauth.model.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -19,9 +20,11 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User user) {
         return Jwts.builder()
-                .subject(userDetails.getUsername())
+                .subject(user.getUsername())
+                .claim("userId", user.getId())
+                .claim("roles", user.getRole())
                 .expiration(new Date(System.currentTimeMillis() + expiration))
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .signWith(this.getSigningKey())

@@ -1,5 +1,7 @@
 package com.esecchi.userauth.response;
 
+import com.esecchi.userauth.model.Role;
+
 import java.time.LocalDate;
 
 public record UserResponseDTO(
@@ -7,5 +9,6 @@ public record UserResponseDTO(
     String email,
     String firstName,
     String lastName,
-    LocalDate registrationDate
+    LocalDate registrationDate,
+    Role role
 ) {}
