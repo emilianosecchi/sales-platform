@@ -1,10 +1,10 @@
-package com.esecchi.auth;
+package com.esecchi.userauth;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class AuthServiceApplicationTests {
+class UserAuthServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
