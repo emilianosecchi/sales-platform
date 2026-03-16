@@ -17,12 +17,17 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<HashMap<String, String>> handleValidationException(MethodArgumentNotValidException ex) {
         HashMap<String, String> validationErrors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach((fieldError) -> {
             validationErrors.put(fieldError.getField(), fieldError.getDefaultMessage());
         });
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(validationErrors);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
 }

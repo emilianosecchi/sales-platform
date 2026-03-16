@@ -19,12 +19,12 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/v1/auth/**").permitAll() // Quedan habilitados únicamente los endpoints de registro y login
-                        .requestMatchers("/api/v1/users/**").authenticated())
-                .addFilterBefore(preAuthenticatedHeaderFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(requests -> requests
+                    .requestMatchers("/api/v1/auth/**").permitAll() // Quedan habilitados únicamente los endpoints de registro y login
+                    .requestMatchers("/api/v1/users/**").authenticated())
+            .addFilterBefore(preAuthenticatedHeaderFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
     }
 
 }

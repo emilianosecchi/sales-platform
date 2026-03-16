@@ -2,9 +2,9 @@ package com.esecchi.userauth.mapper;
 
 import com.esecchi.userauth.model.User;
 import com.esecchi.userauth.request.RegisterRequest;
+import com.esecchi.userauth.request.UserUpdateRequest;
 import com.esecchi.userauth.response.UserResponseDTO;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -15,4 +15,11 @@ public interface UserMapper {
     User toEntity(RegisterRequest request);
 
     UserResponseDTO toResponse(User user);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "email", ignore = true)
+    @Mapping(target = "password", ignore = true)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateEntityFromRequest(UserUpdateRequest request, @MappingTarget User user);
+
 }
