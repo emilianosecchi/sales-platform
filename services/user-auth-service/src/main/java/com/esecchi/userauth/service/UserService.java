@@ -3,6 +3,7 @@ package com.esecchi.userauth.service;
 import com.esecchi.userauth.exception.EmailAlreadyRegisteredException;
 import com.esecchi.userauth.exception.UserNotFoundException;
 import com.esecchi.userauth.mapper.UserMapper;
+import com.esecchi.userauth.messaging.UserEventProducer;
 import com.esecchi.userauth.model.User;
 import com.esecchi.userauth.repository.UserRepository;
 import com.esecchi.userauth.request.RegisterRequest;
@@ -22,6 +23,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final UserEventProducer userEventProducer;
 
     public UserResponseDTO createUser(RegisterRequest request) throws EmailAlreadyRegisteredException {
         if (userRepository.existsByEmail(request.email())) {
@@ -30,6 +32,9 @@ public class UserService {
             User newUser = userMapper.toEntity(request);
             newUser.setPassword(passwordEncoder.encode(request.password()));
             userRepository.save(newUser);
+            userEventProducer.publishUserCreatedEvent(
+                    userMapper.toCreatedEvent(newUser)
+            );
             return userMapper.toResponse(newUser);
         }
     }

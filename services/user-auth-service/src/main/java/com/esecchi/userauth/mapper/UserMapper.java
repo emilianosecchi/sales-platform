@@ -1,5 +1,6 @@
 package com.esecchi.userauth.mapper;
 
+import com.esecchi.common.event.user.UserCreatedEvent;
 import com.esecchi.userauth.model.User;
 import com.esecchi.userauth.request.RegisterRequest;
 import com.esecchi.userauth.request.UserUpdateRequest;
@@ -15,6 +16,9 @@ public interface UserMapper {
     User toEntity(RegisterRequest request);
 
     UserResponseDTO toResponse(User user);
+
+    @Mapping(source = "id", target = "userId")
+    UserCreatedEvent toCreatedEvent(User user);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "email", ignore = true)
