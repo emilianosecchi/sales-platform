@@ -23,12 +23,12 @@ public class UserEventProducer {
         CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(userCreatedTopic, userCreatedEvent);
         future.whenComplete((result, ex) -> {
             if (ex == null) {
-                log.info("Evento enviado exitosamente. Mensaje: {} | Partición: {} | Offset: {}",
-                        result.getProducerRecord().value(),
+                log.info("Mensaje enviado exitosamente al tópico: {} | Partición: {} | Offset: {}",
+                        result.getRecordMetadata().topic(),
                         result.getRecordMetadata().partition(),
                         result.getRecordMetadata().offset());
             } else {
-                log.error("Error al enviar el evento: {}", ex.getMessage());
+                log.error("Error al enviar el mensaje: {}", ex.getMessage());
             }
         });
     }
