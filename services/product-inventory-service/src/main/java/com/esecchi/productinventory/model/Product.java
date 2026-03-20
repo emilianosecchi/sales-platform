@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "product")
@@ -28,8 +28,9 @@ public class Product {
 
     private Boolean enabled = true;
 
-    private LocalDateTime creationDate;
+    private LocalDate creationDate;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ProductCategory category;
 }

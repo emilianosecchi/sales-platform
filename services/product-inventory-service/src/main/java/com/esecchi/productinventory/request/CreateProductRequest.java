@@ -17,6 +17,6 @@ public record CreateProductRequest(
         @NotNull
         BigDecimal price,
 
-        @NotBlank(message = "La categoria del producto es obligatoria")
+        @NotNull(message = "La categoria del producto es obligatoria")
         ProductCategory category
 ) {}
