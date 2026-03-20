@@ -17,7 +17,8 @@ public class GatewayRoutesConfig {
     @Bean
     public RouterFunction<ServerResponse> GatewayMainRouter(AuthenticationFilter authFilter) {
         return userAuthPublicRoutes()
-                .and(userAuthSecuredRoutes(authFilter));
+                .and(userAuthSecuredRoutes(authFilter))
+                .and(productInventorySecuredRoutes(authFilter));
     }
 
     private RouterFunction<ServerResponse> userAuthPublicRoutes() {
@@ -38,4 +39,18 @@ public class GatewayRoutesConfig {
                         lb("user-auth-service"))
                 .build();
     }
+
+    private RouterFunction<ServerResponse> productInventorySecuredRoutes(AuthenticationFilter authFilter) {
+        return route("product-inventory-service-secured")
+                .route(
+                        path("/api/v1/products/**")
+                        .or(path("/api/v1/stock/**"))
+                        .or(path("/api/v1/warehouses/**")),
+                        http())
+                .filter(authFilter)
+                .filter(
+                        lb("product-inventory-service"))
+                .build();
+    }
+
 }
