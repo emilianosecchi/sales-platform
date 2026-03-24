@@ -32,6 +32,14 @@ public class ProductService {
         );
     }
 
+    public Boolean existsById(Long id) {
+        return productRepository.existsById(id);
+    }
+
+    public Product getProductReferenceById(Long id) {
+        return productRepository.getReferenceById(id);
+    }
+
     public List<ProductResponseDTO> getAllProductsFiltered(ProductCategory category, BigDecimal maxPrice) {
         return productRepository.findByFilters(category, maxPrice)
                 .stream().map(productMapper::toResponse).toList();
