@@ -1,6 +1,6 @@
 package com.esecchi.order.mapper;
 
-import com.esecchi.common.dto.order.OrderItemResponse;
+import com.esecchi.common.dto.order.OrderItemDTO;
 import com.esecchi.common.event.order.OrderCreatedEvent;
 import com.esecchi.order.response.OrderResponse;
 import com.esecchi.order.model.Order;
@@ -13,7 +13,7 @@ public interface OrderMapper {
     @Mapping(source = "orderItems", target = "items")
     OrderResponse toResponse(Order order);
 
-    OrderItemResponse toItemResponse(OrderItem orderItem);
+    OrderItemDTO toItemDTO(OrderItem orderItem);
 
     @Mapping(source = "id", target = "orderId")
     @Mapping(source = "orderItems", target = "items")

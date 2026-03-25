@@ -1,6 +1,6 @@
 package com.esecchi.common.event.order;
 
-import com.esecchi.common.dto.order.OrderItemResponse;
+import com.esecchi.common.dto.order.OrderItemDTO;
 import com.esecchi.common.model.order.OrderStatus;
 
 import java.math.BigDecimal;
@@ -12,5 +12,5 @@ public record OrderCreatedEvent(
         LocalDateTime orderDate,
         BigDecimal totalPrice,
         OrderStatus status,
-        List<OrderItemResponse> items
+        List<OrderItemDTO> items
 ) {}

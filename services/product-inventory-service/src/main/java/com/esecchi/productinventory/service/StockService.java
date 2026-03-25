@@ -1,6 +1,6 @@
 package com.esecchi.productinventory.service;
 
-import com.esecchi.common.dto.order.OrderItemResponse;
+import com.esecchi.common.dto.order.OrderItemDTO;
 import com.esecchi.productinventory.exception.InsufficientStockException;
 import com.esecchi.productinventory.exception.ProductNotFoundException;
 import com.esecchi.productinventory.exception.WarehouseNotFoundException;
@@ -45,8 +45,8 @@ public class StockService {
     }
 
     @Transactional
-    public void reserveStock(List<OrderItemResponse> items) throws InsufficientStockException {
-        for (OrderItemResponse item : items) {
+    public void reserveStock(List<OrderItemDTO> items) throws InsufficientStockException {
+        for (OrderItemDTO item : items) {
             Stock stock = stockRepository.findFirstByProduct_IdAndQuantityGreaterThanEqualOrderByQuantityDesc(item.productId(), item.quantity())
                     .orElseThrow(() -> new InsufficientStockException("No hay disponibilidad del producto con id: " + item.productId()));
             stock.setQuantity(stock.getQuantity() - item.quantity());
