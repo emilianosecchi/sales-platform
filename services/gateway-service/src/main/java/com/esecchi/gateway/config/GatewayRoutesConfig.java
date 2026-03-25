@@ -18,7 +18,8 @@ public class GatewayRoutesConfig {
     public RouterFunction<ServerResponse> GatewayMainRouter(AuthenticationFilter authFilter) {
         return userAuthPublicRoutes()
                 .and(userAuthSecuredRoutes(authFilter))
-                .and(productInventorySecuredRoutes(authFilter));
+                .and(productInventorySecuredRoutes(authFilter))
+                .and(orderSecuredRoutes(authFilter));
     }
 
     private RouterFunction<ServerResponse> userAuthPublicRoutes() {
@@ -50,6 +51,17 @@ public class GatewayRoutesConfig {
                 .filter(authFilter)
                 .filter(
                         lb("product-inventory-service"))
+                .build();
+    }
+
+    private RouterFunction<ServerResponse> orderSecuredRoutes(AuthenticationFilter authFilter) {
+        return route("order-service-secured")
+                .route(
+                        path("/api/v1/orders/**"),
+                        http())
+                .filter(authFilter)
+                .filter(
+                        lb("order-service"))
                 .build();
     }
 
