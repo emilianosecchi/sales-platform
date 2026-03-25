@@ -13,4 +13,11 @@
 	<name>common-model</name>
 	<description>Contiene código compartido por los microservicios (eventos, data del modelo, etc.)</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+    </dependencies>
+
 </project>

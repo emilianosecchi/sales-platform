@@ -1,33 +1,29 @@
 server:
-  port: 8083
+  port: 8084
 
 spring:
   application:
-    name: product-inventory-service
+    name: order-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/sales_platform_product_inventory_db
+    url: jdbc:postgresql://localhost:5432/sales_platform_order_db
     username: postgres
     password: 41542654
   jpa:
     hibernate:
       ddl-auto: create-drop
-    defer-datasource-initialization: true
     show-sql: true
     properties:
       hibernate:
         format_sql: true
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
-  sql:
-    init:
-      mode: always
   kafka:
     bootstrap-servers: localhost:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     consumer:
-      group-id: "product-inventory-group"
+      group-id: "order-group"
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
@@ -36,6 +32,8 @@ spring:
     topics:
       order-created: "sp.order.created"
       stock-reservation: "sp.productinventory.reservation.result"
+      product-created: "sp.productinventory.product.created"
+      product-updated: "sp.productinventory.product.updated"
 
 # Registro en el server Eureka
 eureka:

@@ -57,10 +57,10 @@
         <module>services/discovery-server</module>
         <module>services/gateway-service</module>
         <module>services/user-auth-service</module>
-<!--        <module>services/order-service</module>-->
-<!--        <module>services/product-inventory-service</module>-->
+        <module>services/order-service</module>
+        <module>services/product-inventory-service</module>
 <!--        <module>services/payment-service</module>-->
-<!--        <module>services/notification-service</module>-->
+        <module>services/notification-service</module>
     </modules>
 
 </project>
