@@ -2,6 +2,8 @@ package com.esecchi.order.response;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+
+import com.esecchi.common.dto.order.OrderItemResponse;
 import com.esecchi.common.model.order.OrderStatus;
 import com.esecchi.order.model.PaymentMethod;
 import java.util.List;

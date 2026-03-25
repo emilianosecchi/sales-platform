@@ -1,9 +1,9 @@
-package com.esecchi.common.dto.product;
+package com.esecchi.order.request;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-public record ProductItem(
+public record ItemRequest(
         @NotNull(message = "El id del producto es obligatorio")
         Long productId,
         @NotNull(message = "La cantidad es obligatoria")

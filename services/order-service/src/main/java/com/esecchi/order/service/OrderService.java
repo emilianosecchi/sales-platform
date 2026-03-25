@@ -1,14 +1,14 @@
 package com.esecchi.order.service;
 
-import com.esecchi.common.dto.product.ProductItem;
 import com.esecchi.common.model.order.OrderStatus;
 import com.esecchi.order.exception.OrderNotFoundException;
 import com.esecchi.order.mapper.OrderMapper;
+import com.esecchi.order.messaging.producer.OrderEventProducer;
 import com.esecchi.order.model.Order;
 import com.esecchi.order.model.OrderItem;
-import com.esecchi.order.model.ProductSnapshot;
 import com.esecchi.order.repository.OrderRepository;
 import com.esecchi.order.request.CreateOrderRequest;
+import com.esecchi.order.request.ItemRequest;
 import com.esecchi.order.response.OrderResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +25,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductSnapshotService productSnapshotService;
     private final OrderMapper orderMapper;
+    private final OrderEventProducer orderEventProducer;
 
     public OrderResponse getOrderById(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
@@ -44,8 +44,10 @@ public class OrderService {
 
         BigDecimal totalPrice = BigDecimal.ZERO;
 
-        for (ProductItem itemRequest : request.items()) {
-            BigDecimal unitPrice = productSnapshotService.getProductById(itemRequest.productId()).getPrice();
+        for (ItemRequest itemRequest : request.items()) {
+            // FIXME: Corregir la obtención del precio del producto
+            // BigDecimal unitPrice = productSnapshotService.getProductById(itemRequest.productId()).getPrice();
+            BigDecimal unitPrice = BigDecimal.valueOf(10);
 
             OrderItem item = OrderItem.builder()
                     .productId(itemRequest.productId())
@@ -64,7 +66,7 @@ public class OrderService {
         newOrder.setTotalPrice(totalPrice);
         orderRepository.save(newOrder);
 
-        // Publicar evento para el flujo de la Saga (Kafka)
+        orderEventProducer.publishOrderCreatedEvent(orderMapper.toCreatedEvent(newOrder));
 
         return orderMapper.toResponse(newOrder);
     }
