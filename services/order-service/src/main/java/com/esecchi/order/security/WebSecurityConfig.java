@@ -24,6 +24,7 @@ public class WebSecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/v1/orders/**").authenticated()
                 )
                 .addFilterBefore(preAuthenticatedHeaderFilter, UsernamePasswordAuthenticationFilter.class)
