@@ -17,18 +17,28 @@ services:
       # Una única copia de la metadata, no hay backup
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
-      # PLAINTEXT://0.0.0.0:9092 -> Puerto al que se conectan los productores y consumidores
-      # CONTROLLER://0.0.0.0:9093 -> Puerto en el que se comunican los brokers/nodos entre sí
-      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
-
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:29092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
 
       # Determina donde se guardan los archivos de datos, logs de los brokers, metadata del controller, etc.
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
 
     volumes:
       - kafka_data:/var/lib/kafka/data
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: kafka-ui
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    depends_on:
+      - kafka
 
 volumes:
   kafka_data:
