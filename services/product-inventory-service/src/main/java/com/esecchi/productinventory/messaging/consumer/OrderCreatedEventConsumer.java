@@ -1,5 +1,6 @@
 package com.esecchi.productinventory.messaging.consumer;
 
+import com.esecchi.common.event.order.OrderCancelledEvent;
 import com.esecchi.common.event.order.OrderCreatedEvent;
 import com.esecchi.common.event.productinventory.StockReservationStatus;
 import com.esecchi.productinventory.exception.InsufficientStockException;
@@ -21,11 +22,16 @@ public class OrderCreatedEventConsumer {
     @KafkaListener(topics = "${spring.kafka.topics.order-created}", groupId = "${spring.kafka.consumer.group-id}")
     public void handleOrderCreatedEvent(OrderCreatedEvent orderCreatedEvent) {
         try {
-            stockService.reserveStock(orderCreatedEvent.items());
+            stockService.reserveStock(orderCreatedEvent.orderId(), orderCreatedEvent.items());
             stockReservationEventProducer.publishStockReservationResult(orderCreatedEvent.orderId(), StockReservationStatus.RESERVED, "Stock reservado exitosamente");
         } catch (InsufficientStockException ex) {
             stockReservationEventProducer.publishStockReservationResult(orderCreatedEvent.orderId(), StockReservationStatus.INSUFFICIENT_STOCK, ex.getMessage());
         }
+    }
+
+    @KafkaListener(topics = "${spring.kafka.topics.order-cancelled}", groupId = "${spring.kafka.consumer.group-id}")
+    public void handleOrderCancelledEvent(OrderCancelledEvent orderCancelledEvent) {
+        stockService.releaseStockReserved(orderCancelledEvent.orderId());
     }
 
 }

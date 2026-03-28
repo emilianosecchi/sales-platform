@@ -5,7 +5,9 @@ import com.esecchi.productinventory.exception.InsufficientStockException;
 import com.esecchi.productinventory.exception.ProductNotFoundException;
 import com.esecchi.productinventory.exception.WarehouseNotFoundException;
 import com.esecchi.productinventory.model.Stock;
+import com.esecchi.productinventory.model.StockReservation;
 import com.esecchi.productinventory.repository.StockRepository;
+import com.esecchi.productinventory.repository.StockReservationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import java.util.Optional;
 public class StockService {
 
     private final StockRepository stockRepository;
+    private final StockReservationRepository stockReservationRepository;
+
     private final ProductService productService;
     private final WarehouseService warehouseService;
 
@@ -45,14 +49,30 @@ public class StockService {
     }
 
     @Transactional
-    public void reserveStock(List<OrderItemDTO> items) throws InsufficientStockException {
+    public void reserveStock(Long orderId, List<OrderItemDTO> items) throws InsufficientStockException {
         for (OrderItemDTO item : items) {
             Stock stock = stockRepository.findFirstByProduct_IdAndQuantityGreaterThanEqualOrderByQuantityDesc(item.productId(), item.quantity())
                     .orElseThrow(() -> new InsufficientStockException("No hay disponibilidad del producto con id: " + item.productId()));
             stock.setQuantity(stock.getQuantity() - item.quantity());
             stockRepository.save(stock);
-            // TODO: Sería necesario guardar el id del Stock que fue modificado en el caso de tener que realizar un rollback por un fallo en el resto de la transacción distribuida
+            StockReservation stockReservation = StockReservation.builder()
+                    .stockId(stock.getId())
+                    .quantityReserved(item.quantity())
+                    .orderId(orderId)
+                    .build();
+            stockReservationRepository.save(stockReservation);
         }
+    }
+
+    @Transactional
+    public void releaseStockReserved(Long orderId) {
+        List<StockReservation> reservedStock = stockReservationRepository.findByOrderId(orderId);
+        for (StockReservation stockReservation : reservedStock) {
+            Stock stock = stockRepository.findById(stockReservation.getOrderId()).orElseThrow();
+            stock.setQuantity(stock.getQuantity() + stockReservation.getQuantityReserved());
+            stockRepository.save(stock);
+        }
+        stockReservationRepository.deleteAll(reservedStock);
     }
 
 }

@@ -35,6 +35,7 @@ spring:
         spring.json.trusted.packages: "com.esecchi.*"
     topics:
       order-created: "sp.order.created"
+      order-cancelled: "sp.order.cancelled"
       stock-reservation: "sp.productinventory.reservation.result"
 
 # Registro en el server Eureka
