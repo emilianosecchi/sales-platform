@@ -3,6 +3,7 @@ package com.esecchi.productinventory.service;
 import com.esecchi.common.dto.order.OrderItemDTO;
 import com.esecchi.productinventory.exception.InsufficientStockException;
 import com.esecchi.productinventory.exception.ProductNotFoundException;
+import com.esecchi.productinventory.exception.StockNotFoundException;
 import com.esecchi.productinventory.exception.WarehouseNotFoundException;
 import com.esecchi.productinventory.model.Stock;
 import com.esecchi.productinventory.model.StockReservation;
@@ -67,8 +68,11 @@ public class StockService {
     @Transactional
     public void releaseStockReserved(Long orderId) {
         List<StockReservation> reservedStock = stockReservationRepository.findByOrderId(orderId);
+        if (reservedStock.isEmpty()) {
+            return;
+        }
         for (StockReservation stockReservation : reservedStock) {
-            Stock stock = stockRepository.findById(stockReservation.getOrderId()).orElseThrow();
+            Stock stock = stockRepository.findById(stockReservation.getStockId()).orElseThrow(() -> new StockNotFoundException(stockReservation.getStockId()));
             stock.setQuantity(stock.getQuantity() + stockReservation.getQuantityReserved());
             stockRepository.save(stock);
         }
