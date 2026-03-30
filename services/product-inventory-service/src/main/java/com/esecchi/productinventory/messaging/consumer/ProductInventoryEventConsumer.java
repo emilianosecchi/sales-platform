@@ -3,6 +3,7 @@ package com.esecchi.productinventory.messaging.consumer;
 import com.esecchi.common.event.order.OrderCancelledEvent;
 import com.esecchi.common.event.order.OrderCreatedEvent;
 import com.esecchi.common.event.productinventory.StockReservationStatus;
+import com.esecchi.common.model.order.OrderStatus;
 import com.esecchi.productinventory.exception.InsufficientStockException;
 import com.esecchi.productinventory.messaging.producer.StockReservationEventProducer;
 import com.esecchi.productinventory.service.StockService;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class OrderCreatedEventConsumer {
+public class ProductInventoryEventConsumer {
 
     private final StockService stockService;
     private final StockReservationEventProducer stockReservationEventProducer;
@@ -31,7 +32,10 @@ public class OrderCreatedEventConsumer {
 
     @KafkaListener(topics = "${spring.kafka.topics.order-cancelled}", groupId = "${spring.kafka.consumer.group-id}")
     public void handleOrderCancelledEvent(OrderCancelledEvent orderCancelledEvent) {
-        stockService.releaseStockReserved(orderCancelledEvent.orderId());
+        if (orderCancelledEvent.orderStatus() == OrderStatus.CANCELLED_PAYMENT_FAILED) {
+            // Solo se libera el stock reservado cuando la condición de la cancelación de la orden es por pago fallido.
+            stockService.releaseStockReserved(orderCancelledEvent.orderId());
+        }
     }
 
 }

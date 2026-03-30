@@ -51,6 +51,9 @@ public class StockService {
 
     @Transactional
     public void reserveStock(Long orderId, List<OrderItemDTO> items) throws InsufficientStockException {
+        if (stockReservationRepository.existsByOrderId(orderId))
+            return;
+
         for (OrderItemDTO item : items) {
             Stock stock = stockRepository.findFirstByProduct_IdAndQuantityGreaterThanEqualOrderByQuantityDesc(item.productId(), item.quantity())
                     .orElseThrow(() -> new InsufficientStockException("No hay disponibilidad del producto con id: " + item.productId()));

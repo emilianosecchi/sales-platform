@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface StockReservationRepository extends JpaRepository<StockReservation,Long> {
     List<StockReservation> findByOrderId(Long orderId);
+    Boolean existsByOrderId(Long orderId);
 }
