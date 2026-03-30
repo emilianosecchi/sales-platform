@@ -1,5 +1,7 @@
 package com.esecchi.order.service;
 
+import com.esecchi.common.event.order.OrderCancelledEvent;
+import com.esecchi.common.event.order.OrderPaymentRequestedEvent;
 import com.esecchi.common.model.order.OrderStatus;
 import com.esecchi.order.exception.OrderNotFoundException;
 import com.esecchi.order.mapper.OrderMapper;
@@ -69,6 +71,57 @@ public class OrderService {
         orderEventProducer.publishOrderCreatedEvent(orderMapper.toCreatedEvent(newOrder));
 
         return orderMapper.toResponse(newOrder);
+    }
+
+    @Transactional
+    public void confirmStockReservation(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+        if (order.getStatus() == OrderStatus.WAITING_FOR_STOCK_RESERVATION) {
+            order.setStatus(OrderStatus.WAITING_FOR_PAYMENT);
+            orderRepository.save(order);
+            orderEventProducer.publishOrderPaymentRequestEvent(
+                    new OrderPaymentRequestedEvent(orderId, order.getTotalPrice(), order.getPaymentMethod(), order.getPaymentToken())
+            );
+        }
+    }
+
+    @Transactional
+    public void confirmPayment(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+        if (order.getStatus() == OrderStatus.WAITING_FOR_PAYMENT) {
+            order.setStatus(OrderStatus.COMPLETED);
+            orderRepository.save(order);
+            // TODO: Crear el evento cuando la orden esté finalizada.
+            orderEventProducer.publishOrderCompletedEvent();
+        }
+    }
+
+    private void cancelOrder(Long orderId, OrderStatus orderStatus, String reason) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+        if (order.getStatus() == OrderStatus.WAITING_FOR_STOCK_RESERVATION || order.getStatus() == OrderStatus.WAITING_FOR_PAYMENT) {
+            order.setStatus(orderStatus);
+            orderRepository.save(order);
+            orderEventProducer.publishOrderCancelledEvent(
+                    new OrderCancelledEvent(orderId, orderStatus, reason, LocalDateTime.now())
+            );
+        }
+    }
+
+    @Transactional
+    public void cancelOrderDueLackOfStock(Long orderId) {
+        this.cancelOrder(orderId, OrderStatus.CANCELLED_INSUFFICIENT_STOCK,
+                "Alguno de los productos seleccionados no presentaba disponibilidad de stock en nuestros depósitos.");
+    }
+
+    @Transactional
+    public void cancelOrderDueInventoryError(Long orderId) {
+        this.cancelOrder(orderId, OrderStatus.CANCELLED_INVENTORY_ERROR,
+                "Hubo un error inesperado en el inventario.");
+    }
+
+    @Transactional
+    public void cancelOrderDueFailedPayment(Long orderId, String errorMessage) {
+        this.cancelOrder(orderId, OrderStatus.CANCELLED_PAYMENT_FAILED, errorMessage);
     }
 
 }

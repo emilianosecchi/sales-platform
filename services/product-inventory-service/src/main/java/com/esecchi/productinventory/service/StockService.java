@@ -71,9 +71,9 @@ public class StockService {
     @Transactional
     public void releaseStockReserved(Long orderId) {
         List<StockReservation> reservedStock = stockReservationRepository.findByOrderId(orderId);
-        if (reservedStock.isEmpty()) {
+        if (reservedStock.isEmpty())
             return;
-        }
+
         for (StockReservation stockReservation : reservedStock) {
             Stock stock = stockRepository.findById(stockReservation.getStockId()).orElseThrow(() -> new StockNotFoundException(stockReservation.getStockId()));
             stock.setQuantity(stock.getQuantity() + stockReservation.getQuantityReserved());

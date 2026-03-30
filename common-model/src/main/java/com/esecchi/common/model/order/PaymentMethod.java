@@ -1,4 +1,4 @@
-package com.esecchi.order.model;
+package com.esecchi.common.model.order;
 
 public enum PaymentMethod {
     VISA,

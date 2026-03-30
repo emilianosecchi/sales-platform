@@ -32,9 +32,12 @@ spring:
     topics:
       order-created: "sp.order.created"
       order-cancelled: "sp.order.cancelled"
+      order-completed: "sp.order.completed"
+      order-payment-requested: "sp.order.payment.requested"
       stock-reservation: "sp.productinventory.reservation.result"
       product-created: "sp.productinventory.product.created"
       product-updated: "sp.productinventory.product.updated"
+      payment-result: "sp.payment.result"
 
 # Registro en el server Eureka
 eureka:

@@ -1,6 +1,7 @@
 package com.esecchi.order.model;
 
 import com.esecchi.common.model.order.OrderStatus;
+import com.esecchi.common.model.order.PaymentMethod;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,6 +38,8 @@ public class Order {
 
     @Column(nullable = false)
     private PaymentMethod paymentMethod;
+
+    private String paymentToken;
 
     public void addItem(OrderItem orderItem) {
         orderItems.add(orderItem);

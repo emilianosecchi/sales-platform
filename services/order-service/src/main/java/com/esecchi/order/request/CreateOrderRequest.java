@@ -1,6 +1,6 @@
 package com.esecchi.order.request;
 
-import com.esecchi.order.model.PaymentMethod;
+import com.esecchi.common.model.order.PaymentMethod;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
