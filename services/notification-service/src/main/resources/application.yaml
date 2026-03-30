@@ -3,7 +3,19 @@ server:
 
 spring:
   application:
-    name: user-auth-service
+    name: notification-service
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  cloud:
+    openfeign:
+      client:
+        config:
+          user-auth-service:
+            connectTimeout: 2000
+            readTimeout: 3000
+            loggerLevel: full
   kafka:
     bootstrap-servers: localhost:9092
     consumer:
@@ -15,6 +27,8 @@ spring:
         spring.json.trusted.packages: "com.esecchi.*"
     topics:
       user-created: "sp.user.created"
+      order-cancelled: "sp.order.cancelled"
+      order-completed: "sp.order.completed"
 
 # Registro en el server Eureka
 eureka:
