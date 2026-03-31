@@ -1,6 +1,7 @@
 package com.esecchi.order.service;
 
 import com.esecchi.common.event.order.OrderCancelledEvent;
+import com.esecchi.common.event.order.OrderCompletedEvent;
 import com.esecchi.common.event.order.OrderPaymentRequestedEvent;
 import com.esecchi.common.model.order.OrderStatus;
 import com.esecchi.order.exception.OrderNotFoundException;
@@ -91,8 +92,9 @@ public class OrderService {
         if (order.getStatus() == OrderStatus.WAITING_FOR_PAYMENT) {
             order.setStatus(OrderStatus.COMPLETED);
             orderRepository.save(order);
-            // TODO: Crear el evento cuando la orden esté finalizada.
-            orderEventProducer.publishOrderCompletedEvent();
+            orderEventProducer.publishOrderCompletedEvent(
+                    new OrderCompletedEvent(orderId, order.getUserId())
+            );
         }
     }
 

@@ -1,6 +1,7 @@
 package com.esecchi.order.messaging.producer;
 
 import com.esecchi.common.event.order.OrderCancelledEvent;
+import com.esecchi.common.event.order.OrderCompletedEvent;
 import com.esecchi.common.event.order.OrderCreatedEvent;
 import com.esecchi.common.event.order.OrderPaymentRequestedEvent;
 import lombok.RequiredArgsConstructor;
@@ -53,7 +54,7 @@ public class OrderEventProducer {
         this.publishEvent(orderCancelledTopic, event);
     }
 
-    public void publishOrderCompletedEvent() {
-        // TODO: Realizar la implementación
+    public void publishOrderCompletedEvent(OrderCompletedEvent event) {
+        this.publishEvent(orderCompletedTopic, event);
     }
 }
