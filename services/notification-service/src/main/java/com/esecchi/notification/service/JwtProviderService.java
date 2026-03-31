@@ -37,7 +37,7 @@ public class JwtProviderService {
     @PostConstruct
     public void init() {
         log.info("Inicializando JwtProviderService...");
-        refreshTokens();
+        refreshToken();
     }
 
     /**
@@ -48,7 +48,7 @@ public class JwtProviderService {
         if (shouldRefresh()) {
             synchronized (this) {
                 if (shouldRefresh()) {
-                    refreshTokens();
+                    refreshToken();
                 }
             }
         }
@@ -59,11 +59,11 @@ public class JwtProviderService {
      * Tarea programada que corre cada 15 minutos.
      * Si detecta que al token le quedan menos de 10 minutos de vida, lo renueva.
      */
-    @Scheduled(fixedRate = 900000) // 15 minutos
+    @Scheduled(fixedRate = 900000)
     public void scheduledTokenRefresh() {
+        log.debug("Validando la expiración del token jwt.");
         if (shouldRefresh()) {
-            log.info("El token está próximo a vencer. Renovando...");
-            refreshTokens();
+            refreshToken();
         }
     }
 
@@ -74,7 +74,7 @@ public class JwtProviderService {
                 LocalDateTime.now().isAfter(expirationTime.minusMinutes(10));
     }
 
-    private void refreshTokens() {
+    private void refreshToken() {
         try {
             log.info("Solicitando token de servicio para el cliente: {}", this.clientId);
 
