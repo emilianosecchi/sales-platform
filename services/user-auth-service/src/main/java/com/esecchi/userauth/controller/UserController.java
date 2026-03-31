@@ -36,4 +36,10 @@ public class UserController {
         return ResponseEntity.ok(userService.updateUserById(id, request));
     }
 
+    @GetMapping("/{id}/email")
+    @PreAuthorize("hasRole('INTERNAL_SERVICE')")
+    public ResponseEntity<String> getUserEmail(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserEmailById(id));
+    }
+
 }

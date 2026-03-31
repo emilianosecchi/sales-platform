@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-    private final PreAuthenticatedHeaderFilter preAuthenticatedHeaderFilter;
+    private final SecurityFilter securityFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -25,7 +25,7 @@ public class WebSecurityConfig {
             .authorizeHttpRequests(requests -> requests
                     .requestMatchers("/api/v1/auth/**").permitAll() // Quedan habilitados únicamente los endpoints de registro y login
                     .requestMatchers("/api/v1/users/**").authenticated())
-            .addFilterBefore(preAuthenticatedHeaderFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
     }
 

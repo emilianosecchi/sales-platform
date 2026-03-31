@@ -66,6 +66,11 @@ public class UserService {
         return userMapper.toResponse(user);
     }
 
+    public String getUserEmailById(Long userId) {
+        User user = this.findUserEntityById(userId);
+        return user.getEmail();
+    }
+
     private User findUserEntityById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));

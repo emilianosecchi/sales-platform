@@ -1,6 +1,6 @@
 package com.esecchi.notification.service;
 
-import com.esecchi.notification.client.UserClient;
+import com.esecchi.notification.client.UserAuthClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,7 +14,7 @@ public class UserCacheService {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final String USER_EMAIL_PREFIX = "user:email:";
-    private final UserClient userClient;
+    private final UserAuthClient userAuthClient;
 
     public void setUserEmail(Long userId, String email) {
         redisTemplate.opsForValue().set(USER_EMAIL_PREFIX + userId, email);
@@ -27,7 +27,7 @@ public class UserCacheService {
         else {
             log.warn("Cache miss para el usuario con id: {}. Consultando servicio de usuarios.", userId);
             try {
-                userEmail = userClient.getUserEmail(userId);
+                userEmail = userAuthClient.getUserEmail(userId);
                 this.setUserEmail(userId, userEmail);
             } catch (Exception e) {
                 log.error("No fue posible recuperar el email del usuario con id: {}.", userId);

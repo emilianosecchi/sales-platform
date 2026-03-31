@@ -102,7 +102,7 @@ public class OrderService {
             order.setStatus(orderStatus);
             orderRepository.save(order);
             orderEventProducer.publishOrderCancelledEvent(
-                    new OrderCancelledEvent(orderId, orderStatus, reason, LocalDateTime.now())
+                    new OrderCancelledEvent(orderId, order.getUserId(), orderStatus, reason, LocalDateTime.now())
             );
         }
     }

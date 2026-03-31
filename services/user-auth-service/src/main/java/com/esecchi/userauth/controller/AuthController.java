@@ -2,7 +2,8 @@ package com.esecchi.userauth.controller;
 
 import com.esecchi.userauth.request.LoginRequest;
 import com.esecchi.userauth.request.RegisterRequest;
-import com.esecchi.userauth.response.AuthenticationResponse;
+import com.esecchi.common.dto.userauth.request.ServiceLoginRequest;
+import com.esecchi.common.dto.userauth.response.AuthenticationResponse;
 import com.esecchi.userauth.response.UserResponseDTO;
 import com.esecchi.userauth.service.AuthService;
 import com.esecchi.userauth.service.UserService;
@@ -37,8 +38,14 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<AuthenticationResponse> userLogin(@Valid @RequestBody LoginRequest request) {
         AuthenticationResponse authResponse = authService.authenticateUser(request);
+        return ResponseEntity.ok(authResponse);
+    }
+
+    @PostMapping("/services/login")
+    public ResponseEntity<AuthenticationResponse> serviceLogin(@Valid @RequestBody ServiceLoginRequest request) {
+        AuthenticationResponse authResponse = authService.authenticateService(request);
         return ResponseEntity.ok(authResponse);
     }
 }

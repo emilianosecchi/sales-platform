@@ -35,3 +35,12 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+# Configuración de JWT
+jwt:
+  expiration: 3600000
+
+# Configuración de la clave para autenticarse frente al microservicio de user-auth.
+internal:
+  auth:
+    secret: vg2fDaZam16JUmrArRc5nmNMZCPKFsvWB9e77mnF2xN

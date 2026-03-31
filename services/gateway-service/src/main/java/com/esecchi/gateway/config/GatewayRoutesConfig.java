@@ -25,7 +25,10 @@ public class GatewayRoutesConfig {
     private RouterFunction<ServerResponse> userAuthPublicRoutes() {
         return route("user-auth-service-public")
                 .route(
-                        path("/api/v1/auth/**"), http())
+                        path("/api/v1/auth/login")
+                        .or(path("/api/v1/auth/register")),
+                        http()
+                )
                 .filter(
                         lb("user-auth-service"))
                 .build();

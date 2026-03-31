@@ -35,3 +35,9 @@ eureka:
 jwt:
   secret: RVHHaVOsiyMXsE1TwnpWtGGiIEz2mlE5WlGfcDYC6Hc
   expiration: 3600000
+
+# Configuración para autenticar servicios y que puedan consumir la API sincrónicamente
+internal:
+  services:
+    clients:
+      notification-service: vg2fDaZam16JUmrArRc5nmNMZCPKFsvWB9e77mnF2xN
