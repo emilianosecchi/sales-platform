@@ -1,5 +1,6 @@
 package com.esecchi.userauth.service;
 
+import com.esecchi.common.event.user.UserMailUpdatedEvent;
 import com.esecchi.userauth.exception.EmailAlreadyRegisteredException;
 import com.esecchi.userauth.exception.UserNotFoundException;
 import com.esecchi.userauth.mapper.UserMapper;
@@ -51,18 +52,25 @@ public class UserService {
     }
 
     public UserResponseDTO updateUserById(Long userId, UserUpdateRequest request) {
+        boolean mailChanged = false;
         User user = this.findUserEntityById(userId);
         if (StringUtils.hasText(request.email())) {
             if (userRepository.existsByEmail(request.email())) {
                 throw new EmailAlreadyRegisteredException(request.email());
             } else {
                 user.setEmail(request.email());
+                mailChanged = true;
             }
         }
         if (StringUtils.hasText(request.password()))
             user.setPassword(passwordEncoder.encode(request.password()));
         userMapper.updateEntityFromRequest(request, user);
         userRepository.save(user);
+        if (mailChanged) {
+            userEventProducer.publishUserEmailUpdatedEvent(
+                    new UserMailUpdatedEvent(user.getId(), request.email())
+            );
+        }
         return userMapper.toResponse(user);
     }
 

@@ -24,6 +24,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     topics:
       user-created: "sp.user.created"
+      user-email-updated: "sp.user.email.updated"
 
 # Registro en el server Eureka
 eureka:

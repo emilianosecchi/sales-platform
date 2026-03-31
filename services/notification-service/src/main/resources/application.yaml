@@ -27,6 +27,7 @@ spring:
         spring.json.trusted.packages: "com.esecchi.*"
     topics:
       user-created: "sp.user.created"
+      user-email-updated: "sp.user.email.updated"
       order-cancelled: "sp.order.cancelled"
       order-completed: "sp.order.completed"
 
