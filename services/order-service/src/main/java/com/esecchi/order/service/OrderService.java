@@ -48,9 +48,7 @@ public class OrderService {
         BigDecimal totalPrice = BigDecimal.ZERO;
 
         for (ItemRequest itemRequest : request.items()) {
-            // FIXME: Corregir la obtención del precio del producto
-            // BigDecimal unitPrice = productSnapshotService.getProductById(itemRequest.productId()).getPrice();
-            BigDecimal unitPrice = BigDecimal.valueOf(10);
+            BigDecimal unitPrice = productSnapshotService.getProductById(itemRequest.productId()).getPrice();
 
             OrderItem item = OrderItem.builder()
                     .productId(itemRequest.productId())

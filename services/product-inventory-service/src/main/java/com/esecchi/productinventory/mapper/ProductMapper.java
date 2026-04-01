@@ -17,5 +17,6 @@ public interface ProductMapper {
     ProductResponseDTO toResponse(Product product);
 
     @Mapping(source = "id", target = "productId")
+    @Mapping(target = "timestamp", expression = "java(java.time.LocalDateTime.now())")
     ProductCreatedEvent toEvent(Product product);
 }
