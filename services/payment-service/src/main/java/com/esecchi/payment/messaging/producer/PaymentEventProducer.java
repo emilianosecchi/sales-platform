@@ -24,10 +24,10 @@ public class PaymentEventProducer {
         CompletableFuture<SendResult<String, Object>> future = kafkaTemplate.send(paymentResultTopic, event);
         future.whenComplete((result, ex) -> {
             if (ex == null) {
-                log.info("Mensaje enviado exitosamente al tópico: {} | Partición: {} | Offset: {}",
+                log.info("Mensaje enviado exitosamente al tópico: {} | Partición: {} | Evento: {}",
                         result.getRecordMetadata().topic(),
                         result.getRecordMetadata().partition(),
-                        result.getRecordMetadata().offset());
+                        event);
             } else {
                 log.error("Error al enviar el mensaje: {}", ex.getMessage());
             }
