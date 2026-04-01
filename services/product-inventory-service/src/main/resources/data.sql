@@ -17,3 +17,41 @@ INSERT INTO warehouse (name, province) VALUES
     ('Centro Logístico Córdoba', 'Córdoba'),
     ('Nodo Distribución Rosario', 'Santa Fe'),
     ('Almacén Regional Cuyo', 'Mendoza');
+
+INSERT INTO stock (product_id, warehouse_id, quantity) VALUES
+   -- Yerba Mate (ID 1): Disponible en dos puntos
+   (1, 1, 5),
+   (1, 2, 3),
+
+   -- Arroz Integral (ID 2): Solo en el interior
+   (2, 3, 8),
+
+   -- Heladera No Frost (ID 3): Stock mínimo
+   (3, 1, 1),
+
+   -- Teclado Mecánico (ID 4): Stock elevado
+   (4, 4, 10),
+
+   -- Monitor (ID 5): Repartido
+   (5, 1, 4),
+   (5, 3, 3),
+
+   -- iPhone 17 Pro (ID 6): Exclusivo y escaso
+   (6, 1, 2),
+
+   -- Desodorante Axe (ID 7): OMITIDO a propósito para testear stock 0
+
+   -- Lavandina (ID 8): Solo en Córdoba
+   (8, 2, 7),
+
+   -- Set de Herramientas (ID 9):
+   (9, 3, 6),
+
+   -- Alimento para Perros (ID 10):
+   (10, 4, 9),
+
+   -- Vino Malbec (ID 11): Stock en origen (Cuyo)
+   (11, 4, 10),
+
+   -- Silla Ergonómica (ID 12):
+   (12, 1, 5);

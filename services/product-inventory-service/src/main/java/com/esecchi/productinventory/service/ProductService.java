@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -42,7 +43,7 @@ public class ProductService {
     @Transactional
     public void updateProductPrice(Long id, BigDecimal newPrice) {
         var product = this.findProductEntityById(id);
-        ProductPriceUpdatedEvent event = new ProductPriceUpdatedEvent(id, newPrice, product.getPrice(), product.getName());
+        ProductPriceUpdatedEvent event = new ProductPriceUpdatedEvent(id, newPrice, product.getPrice(), product.getName(), LocalDateTime.now());
         product.setPrice(newPrice);
         productRepository.save(product);
         productEventProducer.publishProductPriceUpdatedEvent(event);
