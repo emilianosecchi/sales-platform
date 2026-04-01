@@ -2,7 +2,6 @@ package com.esecchi.order.messaging.consumer;
 
 import com.esecchi.common.event.payment.PaymentResultEvent;
 import com.esecchi.common.event.productinventory.StockReservationResultEvent;
-import com.esecchi.common.event.productinventory.StockReservationStatus;
 import com.esecchi.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

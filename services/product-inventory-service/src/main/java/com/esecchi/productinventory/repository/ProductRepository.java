@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
@@ -16,4 +17,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "(p.enabled = true)"
     )
     List<Product> findByFilters(ProductCategory category, BigDecimal maxPrice);
+
+    Optional<Product> findByNameAndCategory(String name, ProductCategory category);
 }

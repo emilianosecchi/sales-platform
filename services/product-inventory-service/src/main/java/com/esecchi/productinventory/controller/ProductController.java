@@ -2,6 +2,7 @@ package com.esecchi.productinventory.controller;
 
 import com.esecchi.productinventory.model.ProductCategory;
 import com.esecchi.productinventory.request.CreateProductRequest;
+import com.esecchi.productinventory.request.UpdateProductPriceRequest;
 import com.esecchi.productinventory.response.ProductResponseDTO;
 import com.esecchi.productinventory.service.ProductService;
 import jakarta.validation.Valid;
@@ -39,6 +40,13 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponseDTO> getProduct(@PathVariable Long id) {
         return ResponseEntity.ok(productService.getProductById(id));
+    }
+
+    @PutMapping("/{id}/price")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> updateProductPrice(@PathVariable Long id, @RequestBody @Valid UpdateProductPriceRequest request) {
+        productService.updateProductPrice(id, request.price());
+        return ResponseEntity.ok().body("El precio se ha actualizado correctamente.");
     }
 
     @GetMapping

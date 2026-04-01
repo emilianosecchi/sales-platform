@@ -1,5 +1,6 @@
 package com.esecchi.productinventory.mapper;
 
+import com.esecchi.common.event.productinventory.ProductCreatedEvent;
 import com.esecchi.productinventory.model.Product;
 import com.esecchi.productinventory.request.CreateProductRequest;
 import com.esecchi.productinventory.response.ProductResponseDTO;
@@ -14,4 +15,7 @@ public interface ProductMapper {
     Product toEntity(CreateProductRequest request);
 
     ProductResponseDTO toResponse(Product product);
+
+    @Mapping(source = "id", target = "productId")
+    ProductCreatedEvent toEvent(Product product);
 }

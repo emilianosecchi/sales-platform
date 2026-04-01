@@ -37,6 +37,8 @@ spring:
       order-created: "sp.order.created"
       order-cancelled: "sp.order.cancelled"
       stock-reservation: "sp.productinventory.reservation.result"
+      product-created: "sp.productinventory.product.created"
+      product-price-updated: "sp.productinventory.product.price.updated"
 
 # Registro en el server Eureka
 eureka:

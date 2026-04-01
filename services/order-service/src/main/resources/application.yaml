@@ -36,7 +36,7 @@ spring:
       order-payment-requested: "sp.order.payment.requested"
       stock-reservation: "sp.productinventory.reservation.result"
       product-created: "sp.productinventory.product.created"
-      product-updated: "sp.productinventory.product.updated"
+      product-price-updated: "sp.productinventory.product.price.updated"
       payment-result: "sp.payment.result"
 
 # Registro en el server Eureka

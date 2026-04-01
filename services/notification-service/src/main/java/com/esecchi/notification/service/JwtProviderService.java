@@ -61,7 +61,7 @@ public class JwtProviderService {
      */
     @Scheduled(fixedRate = 900000)
     public void scheduledTokenRefresh() {
-        log.debug("Validando la expiración del token jwt.");
+        log.info("Validando la expiración del token jwt. Próxima validación en 15 minutos.");
         if (shouldRefresh()) {
             refreshToken();
         }
