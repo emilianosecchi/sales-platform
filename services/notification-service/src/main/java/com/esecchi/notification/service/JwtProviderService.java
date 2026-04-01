@@ -2,7 +2,7 @@ package com.esecchi.notification.service;
 
 import com.esecchi.common.dto.userauth.request.ServiceLoginRequest;
 import com.esecchi.common.dto.userauth.response.AuthenticationResponse;
-import com.esecchi.notification.client.UserAuthClient;
+import com.esecchi.notification.client.AuthClient;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Slf4j
 public class JwtProviderService {
 
-    private final UserAuthClient userAuthClient;
+    private final AuthClient authClient;
     private String token;
 
     @Value("${jwt.expiration}")
@@ -83,7 +83,7 @@ public class JwtProviderService {
                     this.clientSecret
             );
 
-            AuthenticationResponse response = userAuthClient.serviceLogin(request);
+            AuthenticationResponse response = authClient.serviceLogin(request);
 
             this.token = response.accessToken();
             this.expirationTime = LocalDateTime.now().plusHours(

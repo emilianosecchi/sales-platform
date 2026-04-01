@@ -1,6 +1,6 @@
 package com.esecchi.notification.service;
 
-import com.esecchi.notification.client.UserAuthClient;
+import com.esecchi.notification.client.UserClient;
 import com.esecchi.notification.exception.ServiceUnavailableException;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class UserCacheService {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final String USER_EMAIL_PREFIX = "user:email:";
-    private final UserAuthClient userAuthClient;
+    private final UserClient userClient;
 
     public void setUserEmail(Long userId, String email) {
         redisTemplate.opsForValue().set(USER_EMAIL_PREFIX + userId, email);
@@ -34,7 +34,7 @@ public class UserCacheService {
         log.warn("Cache miss para el usuario con id: {}. Consultando servicio de usuarios.", userId);
 
         try {
-            userEmail = userAuthClient.getUserEmail(userId);
+            userEmail = userClient.getUserEmail(userId);
 
             if (StringUtils.hasText(userEmail)) {
                 this.setUserEmail(userId, userEmail);

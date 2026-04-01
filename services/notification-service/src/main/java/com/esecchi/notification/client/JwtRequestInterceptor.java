@@ -4,9 +4,7 @@ import com.esecchi.notification.service.JwtProviderService;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
-@Component
 @RequiredArgsConstructor
 public class JwtRequestInterceptor implements RequestInterceptor {
 
@@ -17,4 +15,5 @@ public class JwtRequestInterceptor implements RequestInterceptor {
         String token = jwtProviderService.getAccessToken();
         requestTemplate.header("Authorization", "Bearer " + token);
     }
+
 }

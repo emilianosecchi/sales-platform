@@ -26,6 +26,8 @@ public class PaymentGatewaySimulator {
             "CÓDIGO DE SEGURIDAD INVÁLIDO", "LÍMITE DIARIO EXCEDIDO", "TRANSACCIÓN NO AUTORIZADA"
     };
 
+    private static final double SUCCESS_RATE = 0.70; // (70% de probabilidades de éxito)
+
     @Async
     @Transactional
     public void simulatePayment(Long transactionId) {
@@ -38,7 +40,7 @@ public class PaymentGatewaySimulator {
                     .orElseThrow(() -> new RuntimeException("No fue posible encontrar la transacción con id: " + transactionId));
 
 
-            boolean success = Math.random() < 0.7; // (70% de éxito)
+            boolean success = Math.random() < SUCCESS_RATE;
             transaction.setStatus(success ? PaymentStatus.SUCCESS : PaymentStatus.FAILED);
 
             transactionRepository.save(transaction);
