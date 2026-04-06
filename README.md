@@ -70,3 +70,12 @@ Por otro lado, también está suscripto al topico _"sp.order.cancelled"_, al rec
 ### user-auth-service
 Este servicio es el encargado de la autenticación y gestión de los usuarios. Es el unico componente del sistema habilitado para emitir tokens de autenticación JWT.
 Pone a disposición dos endpoints publicos para que un usuario se pueda registrar y loguear. Publica eventos en los topicos _"sp.user.created"_ y _''sp.user.email.updated''_.
+
+# Restricciones y/o limitaciones del diseño actual
+- El diseño actual del sistema centraliza la validación del JWT en el API Gateway suponiendo un despliegue en una misma red privada donde los microservicios no pueden ser accedidos por fuera de la misma. 
+Si se necesitará un control de seguridad más exhaustivo, cada servicio debería validar el token por su cuenta.
+- El flujo actual del sistema no contempla que una orden cuyo pago haya fallado pueda volver a intentar ser pagada. Si el procesamiento del pago falla, la orden quedará cancelada.
+- Actualmente solo hay una API call sincrónica en el sistema que acopla un microservicio con otro: **notification-service** posee una caché de los emails de los usuarios (user:email:{#id}), en el caso de que se llegara a vencer el TTL o el dato se haya borrado, 
+el servicio deberá ir a buscar el dato sincronicamente a la API de **user-auth-service** para garantizar el envío del correo electronico.
+- Los envios de correos son simulados utilizando un logger.
+- El procesamiento del pago también es simulado, para probar los distintos casos de exito o fallo, el procesamiento de un pago tiene una tasa de exito del 70%.
