@@ -22,6 +22,7 @@ public class ProductInventoryEventConsumer {
 
     @KafkaListener(topics = "${spring.kafka.topics.order-created}", groupId = "${spring.kafka.consumer.group-id}")
     public void handleOrderCreatedEvent(OrderCreatedEvent orderCreatedEvent) {
+        log.info("Se ha recibido un evento para reservar stock correspondiente a la orden: {}", orderCreatedEvent.orderId());
         try {
             stockService.reserveStock(orderCreatedEvent.orderId(), orderCreatedEvent.items());
             stockReservationEventProducer.publishStockReservationResult(orderCreatedEvent.orderId(), StockReservationStatus.RESERVED, "Stock reservado exitosamente");
@@ -34,6 +35,7 @@ public class ProductInventoryEventConsumer {
     public void handleOrderCancelledEvent(OrderCancelledEvent orderCancelledEvent) {
         if (orderCancelledEvent.orderStatus() == OrderStatus.CANCELLED_PAYMENT_FAILED) {
             // Solo se libera el stock reservado cuando la condición de la cancelación de la orden es por pago fallido.
+            log.info("Se ha recibido un evento para liberar el stock previamente reservado para la orden: {}", orderCancelledEvent.orderId());
             stockService.releaseStockReserved(orderCancelledEvent.orderId());
         }
     }
