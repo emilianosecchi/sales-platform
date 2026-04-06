@@ -9,6 +9,7 @@ import com.esecchi.productinventory.model.Stock;
 import com.esecchi.productinventory.model.StockReservation;
 import com.esecchi.productinventory.repository.StockRepository;
 import com.esecchi.productinventory.repository.StockReservationRepository;
+import com.esecchi.productinventory.response.StockResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,6 +81,10 @@ public class StockService {
             stockRepository.save(stock);
         }
         stockReservationRepository.deleteAll(reservedStock);
+    }
+
+    public List<StockResponseDTO> getStockFilteredBy(Long productId, Long warehouseId) {
+        return stockRepository.findStockFilteredBy(productId, warehouseId);
     }
 
 }
